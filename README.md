@@ -22,7 +22,7 @@ Tout d'abord notre infrastucture sera dans le réseau 10.0.2.0/24. Nous aurons u
 
 Ce HA Proxy repartira la charge entre deux serveurs Apache en 10.0.2.21/24 et 10.0.2.22/24. Nous installerons sur ces deux serveurs le service Nextcloud qui est une plateforme de collaboration en ligne open source permettant de stocker, partager et accéder à des fichiers, ainsi que d'intégrer des applications telles que le calendrier et la messagerie. Pour faire fonctionné ce service nous avons besoin d'une base de donnée MariaDB SQL ainsi qu'un espace de stockage. 
 
-Pour la base de donnée nous allons mettre en place un Cluster Innodb avec un router MySQL (10.0.2.30/24) avec deux serveurs BDD (MariaDB) en 10.0.2.31/24 et 10.0.2.32/24. 
+Pour la base de donnée nous allons mettre en place un Cluster Innodb avec un router MySQL (MYSQLRT - 10.0.2.30/24) avec deux serveurs BDD (MariaDB) en 10.0.2.31/24 et 10.0.2.32/24. 
 
 Pour la partie stockage nous allons mettre en place un stockage GlusterFS Actif/Passif qui est une configuration où deux nœuds de stockage fonctionnent en mode actif et passif, assurant une haute disponibilité et la reprise sur incident en cas de défaillance d'un nœud, avec deux serveurs en 10.0.2.41/24 et 10.0.2.42/24.
 
@@ -67,11 +67,39 @@ snap install mysql-shell
 systemctl restart mysql.service
 ```
 
-Nous mettons en place le cluster en faisant les commandes suivante sur les deux noeuds :
+Nous mettons en place le cluster en faisant les commandes suivante sur les deux noeuds pour créer un admin remote sur chaque node :
 
 ```bash
 mysql -p
 CREATE USER 'admin'@'%' IDENTIFIED BY 'admin'; 
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION; 
 FLUSH PRIVILEGES;
+```
+
+Depuis MYSQL1 :
+
+```bash
+mysqlsh 
+dba.configure_instance('admin@MYSQL1') 
+dba.configure_instance('admin@MYSQL2') 
+
+\c admin@MYSQL1
+cluster = dba.create_cluster('cluster1') 
+cluster.status()
+
+// Ajout des nodes en mode clone 
+cluster.add_instance('admin@MYSQL2')  
+```
+
+![image](Images/Image2.png)
+
+Sur le MYSQLRT :
+
+```bash
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.25-1_all.deb 
+dpkg -i mysql-apt-config_0.8.25-1_all.deb 
+apt update 
+apt install mysql-router mysql-shell mysql-client 
+
+mysqlrouter --bootstrap admin@MYSQL1 --user=root --directory  /etc/innodbcluster1
 ```
