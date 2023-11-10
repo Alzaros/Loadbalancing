@@ -103,3 +103,16 @@ apt install mysql-router mysql-shell mysql-client
 
 mysqlrouter --bootstrap admin@MYSQL1 --user=root --directory  /etc/innodbcluster1
 ```
+![image](Images/Image3.png)
+
+Transformation en Multiprimary :
+```bash
+mysqlsh
+\c admin@M1
+cluster = dba.get_cluster()
+cluster.switch_to_multi_primary_mode()
+```
+
+Pour terminer la partie MYSQL, voici une vidéo montrant le role du Routeur MySQL ainsi que lolérance à la panne :
+
+![video](Videos/MYSQL_failback.gif)
