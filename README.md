@@ -53,5 +53,25 @@ network:
   version: 2
 ```
 
+Nous changeons ensuite notre fichier host afin que nos serveurs communiquent plus simplement entre eux :
 
+![image](Images/Image1-host.png)
 
+Nous pouvons enfin commencer à installer MySQL :
+
+```bash
+apt install mysql-server 
+snap install mysql-shell 
+# Remplacer bind-address = 127.0.0.1 par bind-address = 0.0.0.0 dans le fichier /etc/mysql/mysql.conf.d/mysqld.cnf
+
+systemctl restart mysql.service
+```
+
+Nous mettons en place le cluster en faisant les commandes suivante sur les deux noeuds :
+
+```bash
+mysql -p
+CREATE USER 'admin'@'%' IDENTIFIED BY 'admin'; 
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION; 
+FLUSH PRIVILEGES;
+```
