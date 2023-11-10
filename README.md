@@ -26,12 +26,32 @@ Pour la base de donnée nous allons mettre en place un Cluster Innodb avec un ro
 
 Pour la partie stockage nous allons mettre en place un stockage GlusterFS Actif/Passif qui est une configuration où deux nœuds de stockage fonctionnent en mode actif et passif, assurant une haute disponibilité et la reprise sur incident en cas de défaillance d'un nœud, avec deux serveurs en 10.0.2.41/24 et 10.0.2.42/24.
 
+![image](Images/schema.png)
+
 ## Mise en place
 
 ### Configuration MYSQL
 
+Tout d'abord nous configurons notre interface réseau en IP fixe
+
+```bash
+# nano /etc/netplan/00-installer-config.yaml
+
+network:
+  ethernets:
+    enp0s3:
+      addresses:
+        - 10.0.2.31/24
+      routes:
+        - to: default
+          via: 10.0.2.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 1.1.1.1
+      dhcp4: false
+  version: 2
+```
 
 
 
-
-![image](Images/schema.png)
