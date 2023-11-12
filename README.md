@@ -181,3 +181,44 @@ Nous allons maintenant voir que les fichiers sont bien répliqué entre les deux
 
 Nous pouvons aussi voir que le pool de sockage est tolérant à la panne :
 ![video](Videos/glusterfs_failback.gif)
+
+### Mise en place de NextCloud
+
+Nous allons mettre en place Nextcloud est une plateforme de collaboration en ligne open source qui offre des services de stockage de fichiers, de partage et de collaboration, le tout hébergé sur votre propre infrastructure. Il permet aux utilisateurs de synchroniser et de partager des fichiers, ainsi que de collaborer sur des documents en temps réel.
+
+Pour cela nous allons mettre en place deux serveurs apache2, HTTP1 (10.0.2.21/24) et HTTP2 (10.0.2.22/24).
+
+Pour commencer nous allons créer completement le serveur HTTP1 puis nous allons ensuite le cloner afin d'avoir la même configuration sur le HTTP2.
+Pour cela nous allons configurer le fichier /etc/hosts que l'on peut copié sur tous nos serveurs :
+
+![image](Images/Image9.png)
+
+Nous installaons ensuite apache2 sur le serveurs : 
+
+```bash
+apt install apache2
+systemctl enable apache2
+systemctl start apache2
+```
+
+Une fois installer, nous pouvons voir la page par défaut d'apache sur le serveur :
+
+![image](Images/Image10.png)
+
+Pour le besoin de NextCloud nous devons activer plusieurs module d'apache2 :
+
+```bash
+Nous devons ensuite ajouter plusieurs module :
+sudo a2enmod headers
+sudo a2enmod env
+sudo a2enmod dir
+sudo a2enmod mime
+sudo a2enmod ssl 
+sudo a2ensite default-ssl
+
+systemctl restart apache2
+```
+
+
+
+
