@@ -165,3 +165,19 @@ Nous devons maintenant ouvrir les ports suivants sur notre réseau afin que les 
 sudo ufw allow from 10.0.2.0/24 to any port 55978
 sudo ufw allow from 10.0.2.0/24 to any port 56308
 ```
+
+Connectons nous maintenant sur le client pour y connecter le pool de stockage, nous devons dans un premier temps installer glusterfs client et créer un dossier sur le serveur afin d'y monter la partition :
+
+```bash
+apt install glusterfs-client
+mkdir /storage-client
+mount -t glusterfs NFS1:/volume1 /storage-client
+```
+
+![image](Images/Image8.png)
+
+Nous allons maintenant voir que les fichiers sont bien répliqué entre les deux serveurs :
+![video](Videos/glusterFS.gif)
+
+Nous pouvons aussi voir que le pool de sockage est tolérant à la panne :
+![video](Videos/glusterfs_failback.gif)
