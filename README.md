@@ -116,3 +116,31 @@ cluster.switch_to_multi_primary_mode()
 Pour terminer la partie MYSQL, voici une vidéo montrant le role du Routeur MySQL ainsi que lolérance à la panne :
 
 ![video](Videos/MYSQL_failback.gif)
+
+### Mise en place d'un pool de stockage (GlsuterFS)
+
+Pour mettre en place un pool de stockage redondant, nous allons choisir la technologie GlusterFS qui est un système de fichiers distribué open source conçu pour fournir une gestion transparente du stockage sur plusieurs serveurs. Il permet d'agrégation de l'espace disque et offre une haute disponibilité et une extensibilité.
+
+Nous allons donc utiliser deux serveurs, NFS1 (10.0.2.41/24) et NFS (10.0.2.42/24). Nous configurons donc dans un premiers temps les IP et les ficiers hosts sur les machines :
+![image](Images/Image4.png)
+
+Nous installons ensuite GlusterFS sur les deux serveurs :
+
+```bash
+sudo apt install glusterfs-server
+sudo systemctl start glusterd.service
+sudo systemctl enableglusterd.service
+```
+
+Nous activons le pare-feu et nous n'autorisons que les flux venant de notre réseau :
+
+```bash
+sudo ufw allow from 10.0.2.0/24 to any port 24007
+```
+
+Nous allons maintenant établir le connexion entre les deux noeuds grace à la commande suivante :
+
+```bash
+ gluster peer probe NFS2
+```
+![image](Images/Image5.png)
