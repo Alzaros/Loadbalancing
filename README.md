@@ -121,7 +121,8 @@ Pour terminer la partie MYSQL, voici une vidéo montrant le role du Routeur MySQ
 
 Pour mettre en place un pool de stockage redondant, nous allons choisir la technologie GlusterFS qui est un système de fichiers distribué open source conçu pour fournir une gestion transparente du stockage sur plusieurs serveurs. Il permet d'agrégation de l'espace disque et offre une haute disponibilité et une extensibilité.
 
-Nous allons donc utiliser deux serveurs, NFS1 (10.0.2.41/24) et NFS (10.0.2.42/24). Nous configurons donc dans un premiers temps les IP et les ficiers hosts sur les machines :
+Nous allons donc utiliser deux serveurs, NFS1 (10.0.2.41/24) et NFS (10.0.2.42/24). Nous configurons donc dans un premiers temps les IP et les fichiers hosts sur les machines :
+
 ![image](Images/Image4.png)
 
 Nous installons ensuite GlusterFS sur les deux serveurs :
