@@ -208,17 +208,64 @@ Une fois installer, nous pouvons voir la page par défaut d'apache sur le serveu
 Pour le besoin de NextCloud nous devons activer plusieurs module d'apache2 :
 
 ```bash
-Nous devons ensuite ajouter plusieurs module :
 sudo a2enmod headers
 sudo a2enmod env
 sudo a2enmod dir
 sudo a2enmod mime
-sudo a2enmod ssl 
+sudo a2enmod ssl
 sudo a2ensite default-ssl
 
 systemctl restart apache2
 ```
 
+Nous devons aussi installer PHP et d'autres package nécessaire: 
 
+```bash
+sudo apt install php php-imagick php7.4-common php7.4-mysql php7.4-fpm php7.4-gd php7.4-json php7.4-curl  php7.4-zip php7.4-xml php7.4-mbstring php7.4-bz2 php7.4-intl php7.4-bcmath php7.4-gmp
+```
 
+Nous pouvons enfin installer Nextcloud :
 
+```bash
+wget https://download.nextcloud.com/server/releases/nextcloud-27.1.3.tar.bz2
+tar -xvf nextcloud-27.1.3.tar.bz2
+
+sudo mkdir /var/www/nextcloud
+sudo cp -R nextcloud/* /var/www/nextcloud
+sudo chown -R www-data:www-data /var/www/nextcloud
+sudo nano /etc/apache2/sites-available/nextcloud.conf
+```
+
+Nous rajoutons dans le fichier :
+
+```bash
+Alias /nextcloud "/var/www/nextcloud/"
+
+<Directory /var/www/nextcloud/>
+Require all granted
+AllowOverride All
+Options FollowSymLinks MultiViews
+
+<IfModule mod_dav.c>
+Dav off
+</IfModule>
+</Directory>
+```
+
+Nous redemarrons le service d'apache2 et nous pouvons enfin voir la page de configuration
+
+```bash
+systemctl restart apache2
+```
+
+![image](Images/Image11.png)
+
+Nous renseignons nos différentes informations et nous passons à l'étape suivante :
+
+![image](Images/Image12.png)
+
+![image](Images/Image13.png)
+
+Une fois que la configuration est terminée, nous allons cloner cette machine pour créer la machine HTTP2. Il suffira juste de changer l'IP et l'hostname puis nous pouvons voir que les deux Nextcloud sont acessibles :
+
+![image](Images/Image14.png)
