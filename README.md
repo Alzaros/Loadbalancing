@@ -26,7 +26,7 @@ Pour la base de donnée nous allons mettre en place un Cluster Innodb avec un ro
 
 Pour la partie stockage nous allons mettre en place un stockage GlusterFS Actif/Passif qui est une configuration où deux nœuds de stockage fonctionnent en mode actif et passif, assurant une haute disponibilité et la reprise sur incident en cas de défaillance d'un nœud, avec deux serveurs en 10.0.2.41/24 et 10.0.2.42/24.
 
-![image](Images/schema.png)
+![image](Images/schema.jpg)
 
 ## Mise en place
 
