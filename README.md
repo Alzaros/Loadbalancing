@@ -269,3 +269,21 @@ Nous renseignons nos différentes informations et nous passons à l'étape suiva
 Une fois que la configuration est terminée, nous allons cloner cette machine pour créer la machine HTTP2. Il suffira juste de changer l'IP et l'hostname puis nous pouvons voir que les deux Nextcloud sont acessibles :
 
 ![image](Images/Image14.png)
+
+Nous pouvons maintenant mettre en place le HA Proxy (10.0.2.11/24) :
+
+```bash
+apt install haproxy
+```
+Nous configurons ensuite le fichier /etc/haproxy/haproxy.cfg :
+
+![image](Images/Image15.png)
+
+Nous pouvons maintenant acceder à la page NextCloud depuis L'IP du proxy et voir le Load Balancing ainsi que la tolérence aux pannes :
+
+![video](Videos/Nextcloud.gif)
+
+
+
+
+
