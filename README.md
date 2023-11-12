@@ -145,3 +145,23 @@ Nous allons maintenant établir le connexion entre les deux noeuds grace à la c
  gluster peer probe NFS2
 ```
 ![image](Images/Image5.png)
+
+Une fois que les deux noeuds sont liés, nous allons créer pool de stockage sur NFS1 :
+
+```bash
+sudo gluster volume create volume1 replica 2 NFS1:/storage-gluster NFS2:/storage-gluster force
+sudo gluster volume start volume1
+```
+
+![image](Images/Image6.png)
+
+Nous pouvons voir que le cluster est bien créé:
+
+![image](Images/Image7.png)
+
+Nous devons maintenant ouvrir les ports suivants sur notre réseau afin que les clients puissent s'y connecté :
+
+```bash
+sudo ufw allow from 10.0.2.0/24 to any port 55978
+sudo ufw allow from 10.0.2.0/24 to any port 56308
+```
